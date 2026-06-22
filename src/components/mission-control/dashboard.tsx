@@ -168,8 +168,8 @@ const pulseClasses: Record<AgentStatus, string> = {
   Complete: "bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.85)]",
 };
 
-// Seeds the dashboard with roughly five days of already-established uptime.
-const INITIAL_UPTIME_SECONDS = 438_210;
+// Seeds the dashboard as if Mission Control has already been running for about five days.
+const INITIAL_UPTIME_SEED_SECONDS = 438_210;
 // Simulates a fast-moving but readable system heartbeat between refreshes.
 const UPTIME_INCREMENT_SECONDS = 43;
 const SIMULATION_INTERVAL_MS = 2_800;
@@ -422,7 +422,7 @@ export function MissionControlDashboard() {
   const [selectedAgentId, setSelectedAgentId] = useState(missionAgents[0]?.id);
   const [detailOpen, setDetailOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [uptimeSeconds, setUptimeSeconds] = useState(INITIAL_UPTIME_SECONDS);
+  const [uptimeSeconds, setUptimeSeconds] = useState(INITIAL_UPTIME_SEED_SECONDS);
 
   useEffect(() => {
     let step = 0;
@@ -436,7 +436,7 @@ export function MissionControlDashboard() {
             "Working",
             "Working",
             "Waiting",
-            index === 4 && step % 3 === 0 ? "Error" : "Complete",
+            agent.id === "customer-support-agent" && step % 3 === 0 ? "Error" : "Complete",
             "Working",
           ];
           const nextStatus = statusCycle[(step + index) % statusCycle.length];
@@ -572,7 +572,7 @@ export function MissionControlDashboard() {
   }, [agents]);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-[#030712] text-slate-50">
+    <main id="main-content" className="min-h-screen overflow-hidden bg-[#030712] text-slate-50">
       <div className="mission-grid min-h-screen">
         <div className="mx-auto flex min-h-screen w-full max-w-[1800px] flex-col gap-6 px-4 py-4 md:px-6 xl:px-8">
           <header className="flex items-center justify-between gap-4">
