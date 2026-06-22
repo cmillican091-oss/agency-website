@@ -132,6 +132,10 @@ const pulseClasses: Record<AgentStatus, string> = {
   Complete: "bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.85)]",
 };
 
+const INITIAL_UPTIME_SECONDS = 438_210;
+const UPTIME_INCREMENT_SECONDS = 43;
+const SIMULATION_INTERVAL_MS = 2_800;
+
 function DashboardSidebar() {
   return (
     <div className="flex h-full flex-col gap-6">
@@ -467,7 +471,7 @@ export function MissionControlDashboard() {
   const [selectedAgentId, setSelectedAgentId] = useState(missionAgents[0]?.id);
   const [detailOpen, setDetailOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [uptimeSeconds, setUptimeSeconds] = useState(438_210);
+  const [uptimeSeconds, setUptimeSeconds] = useState(INITIAL_UPTIME_SECONDS);
   const chartsReady = useSyncExternalStore(
     () => () => undefined,
     () => true,
@@ -478,7 +482,7 @@ export function MissionControlDashboard() {
     let step = 0;
     const interval = setInterval(() => {
       step += 1;
-      setUptimeSeconds((previous) => previous + 43);
+      setUptimeSeconds((previous) => previous + UPTIME_INCREMENT_SECONDS);
 
       setAgents((current) =>
         current.map((agent, index) => {
@@ -516,7 +520,7 @@ export function MissionControlDashboard() {
             status: nextStatus,
             efficiency: Math.max(
               79,
-              Math.min(99, agent.efficiency + (((step + index) % 2 === 0 ? 1 : -1) as number)),
+              Math.min(99, agent.efficiency + ((step + index) % 2 === 0 ? 1 : -1)),
             ),
             revenueGenerated: agent.revenueGenerated + revenueDelta,
             logs: shouldLog
@@ -569,7 +573,7 @@ export function MissionControlDashboard() {
           ...current,
         ].slice(0, 10),
       );
-    }, 2800);
+    }, SIMULATION_INTERVAL_MS);
 
     return () => clearInterval(interval);
   }, []);
