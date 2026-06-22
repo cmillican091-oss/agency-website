@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import dynamic from "next/dynamic";
 import {
   Activity,
   AlertTriangle,
@@ -24,18 +25,6 @@ import {
   Tickets,
   Workflow,
 } from "lucide-react";
-import {
-  Area,
-  AreaChart,
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
-
 import {
   activityFeed,
   baseAlerts,
@@ -66,6 +55,53 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
+const RevenuePanelCharts = dynamic(
+  () => import("./revenue-charts").then((module) => module.RevenuePanelCharts),
+  {
+    ssr: false,
+    loading: () => (
+      <>
+        <div className="h-[280px] rounded-[24px] border border-white/8 bg-black/20 p-3">
+          <div className="flex h-full items-end gap-3">
+            {revenueTrend.map((item) => (
+              <div key={item.label} className="flex flex-1 flex-col items-center gap-3">
+                <div
+                  className="w-full rounded-t-2xl bg-gradient-to-t from-cyan-500/20 to-cyan-300/70"
+                  style={{ height: `${Math.max(24, item.revenue / 120)}px` }}
+                />
+                <span className="font-mono text-xs text-slate-500">{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className="space-y-4">
+          <div className="rounded-[24px] border border-white/8 bg-white/[0.03] p-5">
+            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-slate-400">
+              Weekly Uplift
+            </p>
+            <p className="mt-2 text-3xl font-semibold text-slate-50">+18.4%</p>
+            <p className="mt-1 text-sm text-slate-400">
+              Revenue acceleration led by Store Manager and Analytics Agent.
+            </p>
+          </div>
+          <div className="h-[170px] rounded-[24px] border border-white/8 bg-black/20 p-3">
+            <div className="flex h-full items-end gap-3">
+              {revenueTrend.map((item) => (
+                <div key={item.label} className="flex flex-1 flex-col items-center justify-end gap-2">
+                  <div
+                    className="w-full rounded-t-2xl bg-gradient-to-t from-violet-500/30 to-violet-300/80"
+                    style={{ height: `${Math.max(18, item.pipeline * 7)}px` }}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </>
+    ),
+  },
+);
 
 const statusVariant: Record<
   AgentStatus,
@@ -132,6 +168,7 @@ const pulseClasses: Record<AgentStatus, string> = {
   Complete: "bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.85)]",
 };
 
+// Seeds the dashboard with roughly five days of already-established uptime.
 const INITIAL_UPTIME_SECONDS = 438_210;
 // Simulates a fast-moving but readable system heartbeat between refreshes.
 const UPTIME_INCREMENT_SECONDS = 43;
@@ -357,7 +394,7 @@ function AgentDetailSheet({
   );
 }
 
-function RevenuePanel({ chartsReady }: { chartsReady: boolean }) {
+function RevenuePanel() {
   return (
     <Card className="glass-border scanline relative overflow-hidden rounded-[30px]">
       <CardHeader>
@@ -372,95 +409,7 @@ function RevenuePanel({ chartsReady }: { chartsReady: boolean }) {
         </div>
       </CardHeader>
       <CardContent className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_280px]">
-        <div className="h-[280px] rounded-[24px] border border-white/8 bg-black/20 p-3">
-          {chartsReady ? (
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueTrend}>
-                <defs>
-                  <linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.7} />
-                    <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
-                <XAxis dataKey="label" stroke="#94a3b8" tickLine={false} axisLine={false} />
-                <YAxis
-                  stroke="#94a3b8"
-                  tickLine={false}
-                  axisLine={false}
-                  tickFormatter={(value) => `$${value / 1000}k`}
-                />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "rgba(2, 6, 23, 0.92)",
-                    border: "1px solid rgba(34,211,238,0.2)",
-                    borderRadius: "18px",
-                  }}
-                />
-                <Area
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="#22d3ee"
-                  strokeWidth={3}
-                  fill="url(#revenueFill)"
-                />
-              </AreaChart>
-            </ResponsiveContainer>
-          ) : (
-            <div className="flex h-full items-end gap-3">
-              {revenueTrend.map((item) => (
-                <div key={item.label} className="flex flex-1 flex-col items-center gap-3">
-                  <div
-                    className="w-full rounded-t-2xl bg-gradient-to-t from-cyan-500/20 to-cyan-300/70"
-                    style={{ height: `${Math.max(24, item.revenue / 120)}px` }}
-                  />
-                  <span className="font-mono text-xs text-slate-500">{item.label}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <div className="space-y-4">
-          <div className="rounded-[24px] border border-white/8 bg-white/[0.03] p-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-slate-400">
-              Weekly Uplift
-            </p>
-            <p className="mt-2 text-3xl font-semibold text-slate-50">+18.4%</p>
-            <p className="mt-1 text-sm text-slate-400">
-              Revenue acceleration led by Store Manager and Analytics Agent.
-            </p>
-          </div>
-          <div className="h-[170px] rounded-[24px] border border-white/8 bg-black/20 p-3">
-            {chartsReady ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={revenueTrend}>
-                  <CartesianGrid stroke="rgba(148,163,184,0.08)" vertical={false} />
-                  <XAxis dataKey="label" hide />
-                  <YAxis hide />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "rgba(2, 6, 23, 0.92)",
-                      border: "1px solid rgba(34,211,238,0.2)",
-                      borderRadius: "18px",
-                    }}
-                  />
-                  <Bar dataKey="pipeline" fill="#a855f7" radius={[12, 12, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="flex h-full items-end gap-3">
-                {revenueTrend.map((item) => (
-                  <div key={item.label} className="flex flex-1 flex-col items-center justify-end gap-2">
-                    <div
-                      className="w-full rounded-t-2xl bg-gradient-to-t from-violet-500/30 to-violet-300/80"
-                      style={{ height: `${Math.max(18, item.pipeline * 7)}px` }}
-                    />
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+        <RevenuePanelCharts />
       </CardContent>
     </Card>
   );
@@ -474,11 +423,6 @@ export function MissionControlDashboard() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [uptimeSeconds, setUptimeSeconds] = useState(INITIAL_UPTIME_SECONDS);
-  const chartsReady = useSyncExternalStore(
-    () => () => undefined,
-    () => true,
-    () => false,
-  );
 
   useEffect(() => {
     let step = 0;
@@ -501,7 +445,7 @@ export function MissionControlDashboard() {
           const revenueDelta =
             nextStatus === "Working" ? 140 + index * 21 : nextStatus === "Complete" ? 320 : 40;
           const shouldLog = index === step % current.length;
-          const eventTime = new Date(Date.now() + step * 1000).toLocaleTimeString("en-US", {
+          const eventTime = new Date().toLocaleTimeString("en-US", {
             hour: "2-digit",
             minute: "2-digit",
             second: "2-digit",
@@ -558,7 +502,7 @@ export function MissionControlDashboard() {
       );
 
       const activeAgent = missionAgents[step % missionAgents.length];
-      const timestamp = new Date(Date.now() + step * 1000).toLocaleTimeString("en-US", {
+      const timestamp = new Date().toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
         hour12: false,
@@ -766,7 +710,7 @@ export function MissionControlDashboard() {
               </Card>
 
               <div className="grid gap-6 2xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)]">
-                <RevenuePanel chartsReady={chartsReady} />
+                <RevenuePanel />
 
                 <Card className="glass-border rounded-[30px]">
                   <CardHeader>
