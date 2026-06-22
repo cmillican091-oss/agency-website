@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mission Control | Clearwater Digital</title>
+<style>
+:root { --blue:#0a6ebd; --blue-dark:#074e87; --aqua:#1fb6c1; --ink:#0f1b2d; --slate:#566678; --line:#dbe8ef; --bg:#f5fafc; --white:#ffffff; }
+* { box-sizing:border-box; margin:0; padding:0; }
+body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:var(--ink); line-height:1.6; background:var(--bg); }
+a { color:var(--blue); text-decoration:none; }
+.container { width:min(1100px,calc(100% - 40px)); margin:0 auto; }
+header { background:linear-gradient(135deg,var(--blue) 0%,var(--aqua) 100%); color:#fff; padding:40px 0 56px; }
+header .brand { font-size:1.1rem; font-weight:700; opacity:0.9; margin-bottom:10px; }
+header h1 { font-size:clamp(2rem,5vw,3rem); margin-bottom:8px; }
+header p { opacity:0.95; max-width:600px; }
+.wrap { display:grid; grid-template-columns:1.3fr 1fr; gap:24px; margin:-32px auto 60px; }
+.card { background:#fff; border:1px solid var(--line); border-radius:18px; padding:26px; box-shadow:0 10px 30px rgba(10,110,189,0.06); }
+.card h2 { font-size:1.25rem; margin-bottom:16px; color:var(--blue-dark); }
+.links { display:grid; gap:12px; }
+.link-item { display:flex; align-items:center; gap:14px; padding:14px 16px; border:1px solid var(--line); border-radius:12px; background:var(--bg); transition:transform .2s,border-color .2s; }
+.link-item:hover { transform:translateX(4px); border-color:var(--aqua); }
+.link-item .ico { width:40px; height:40px; flex:none; border-radius:10px; background:linear-gradient(135deg,var(--blue),var(--aqua)); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:700; }
+.link-item .t { font-weight:700; color:var(--ink); }
+.link-item .d { font-size:0.85rem; color:var(--slate); }
+.goals { display:grid; gap:14px; margin-bottom:26px; }
+.goal { display:flex; gap:10px; align-items:flex-start; }
+.goal .num { width:26px; height:26px; flex:none; border-radius:50%; background:var(--aqua); color:#fff; font-weight:700; font-size:0.85rem; display:flex; align-items:center; justify-content:center; }
+.checklist { display:grid; gap:10px; }
+.check { display:flex; align-items:center; gap:12px; padding:12px 14px; border:1px solid var(--line); border-radius:10px; cursor:pointer; }
+.check input { width:18px; height:18px; accent-color:var(--blue); cursor:pointer; }
+.check.done span { text-decoration:line-through; color:var(--slate); }
+.note { font-size:0.8rem; color:var(--slate); margin-top:14px; }
+footer { text-align:center; color:var(--slate); padding:30px 0 50px; font-size:0.9rem; }
+@media (max-width:820px) { .wrap { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<header>
+<div class="container">
+<div class="brand">Clearwater Digital</div>
+<h1>Mission Control</h1>
+<p>Your daily command center. Everything you need to run the agency in one place.</p>
+</div>
+</header>
+
+<div class="container">
+<div class="wrap">
+<div class="card">
+<h2>Quick Links</h2>
+<div class="links">
+<a class="link-item" href="index.html" target="_blank"><span class="ico">W</span><span><span class="t">Live Website</span><br><span class="d">Your public Clearwater Digital site</span></span></a>
+<a class="link-item" href="demos/roofing.html" target="_blank"><span class="ico">R</span><span><span class="t">Roofing Demo</span><br><span class="d">Concept site for home-service prospects</span></span></a>
+<a class="link-item" href="demos/dental.html" target="_blank"><span class="ico">D</span><span><span class="t">Dental Demo</span><br><span class="d">Concept site for dental prospects</span></span></a>
+<a class="link-item" href="MAX-playbook.md" target="_blank"><span class="ico">P</span><span><span class="t">Max's Playbook</span><br><span class="d">Cold-call scripts, objections, follow-ups</span></span></a>
+<a class="link-item" href="MAX-system-prompt.md" target="_blank"><span class="ico">M</span><span><span class="t">Max's System Prompt</span><br><span class="d">The AI assistant persona &amp; rules</span></span></a>
+<a class="link-item" href="https://github.com/cmillican091-oss/agency-website" target="_blank"><span class="ico">G</span><span><span class="t">GitHub Repo</span><br><span class="d">All your files and code</span></span></a>
+</div>
+</div>
+
+<div class="card">
+<h2>Today's Goals</h2>
+<div class="goals">
+<div class="goal"><span class="num">1</span><span>Make <strong>20 cold calls</strong> to local roofers, HVAC, plumbers, or dental offices.</span></div>
+<div class="goal"><span class="num">2</span><span>Send <strong>5 follow-up emails</strong> with a demo link.</span></div>
+<div class="goal"><span class="num">3</span><span>Book <strong>1 discovery call</strong> or quote conversation.</span></div>
+</div>
+
+<h2>Daily Checklist</h2>
+<div class="checklist" id="cl">
+<label class="check"><input type="checkbox" data-k="c1"><span>Review my call list for today</span></label>
+<label class="check"><input type="checkbox" data-k="c2"><span>Make my cold calls</span></label>
+<label class="check"><input type="checkbox" data-k="c3"><span>Log who I talked to &amp; next steps</span></label>
+<label class="check"><input type="checkbox" data-k="c4"><span>Send follow-up emails with demo links</span></label>
+<label class="check"><input type="checkbox" data-k="c5"><span>Reply to any leads from the website</span></label>
+<label class="check"><input type="checkbox" data-k="c6"><span>Plan tomorrow's call list</span></label>
+</div>
+<p class="note">Your checkmarks save in this browser automatically and reset each day.</p>
+</div>
+</div>
+</div>
+
+<footer>Clearwater Digital — Mission Control</footer>
+
+<script>
+(function(){
+  var today = new Date().toISOString().slice(0,10);
+  var saved = JSON.parse(localStorage.getItem('cwd-mc') || '{}');
+  if (saved.date !== today) { saved = { date: today, items: {} }; }
+  document.querySelectorAll('#cl input').forEach(function(box){
+    var k = box.getAttribute('data-k');
+    if (saved.items[k]) { box.checked = true; box.closest('.check').classList.add('done'); }
+    box.addEventListener('change', function(){
+      saved.items[k] = box.checked;
+      box.closest('.check').classList.toggle('done', box.checked);
+      localStorage.setItem('cwd-mc', JSON.stringify(saved));
+    });
+  });
+})();
+</script>
+</body>
+</html>
