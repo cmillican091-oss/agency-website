@@ -133,8 +133,10 @@ const pulseClasses: Record<AgentStatus, string> = {
 };
 
 const INITIAL_UPTIME_SECONDS = 438_210;
+// Simulates a fast-moving but readable system heartbeat between refreshes.
 const UPTIME_INCREMENT_SECONDS = 43;
 const SIMULATION_INTERVAL_MS = 2_800;
+const MAX_EVENT_ITEMS = 5;
 
 function DashboardSidebar() {
   return (
@@ -531,10 +533,13 @@ export function MissionControlDashboard() {
                     message: `${nextStatus} • ${nextTask}`,
                   },
                   ...agent.logs,
-                ].slice(0, 5)
+                ].slice(0, MAX_EVENT_ITEMS)
               : agent.logs,
             history: shouldLog
-              ? [{ time: eventTime.slice(0, 5), label: `Realtime event • ${nextTask}` }, ...agent.history].slice(0, 5)
+              ? [
+                  { time: eventTime.slice(0, 5), label: `Realtime event • ${nextTask}` },
+                  ...agent.history,
+                ].slice(0, MAX_EVENT_ITEMS)
               : agent.history,
           };
         }),
