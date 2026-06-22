@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roofing Company Concept Demo | Clearwater Digital</title>
+  <style>
+    :root { --blue:#0a6ebd; --blue-dark:#074e87; --aqua:#1fb6c1; --ink:#0f1b2d; --slate:#526274; --line:#dbe8ef; --bg:#f5fafc; --white:#ffffff; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:var(--ink); line-height:1.6; background:var(--white); }
+    a { color:inherit; text-decoration:none; }
+    .container { width:min(1120px,calc(100% - 40px)); margin:0 auto; }
+    .banner { background:var(--ink); color:#fff; padding:12px 0; font-size:0.95rem; text-align:center; }
+    .banner strong { color:#7fe7ef; }
+    header { background:linear-gradient(135deg,var(--bg) 0%,#e3f3f7 100%); border-bottom:1px solid var(--line); }
+    nav { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:22px 0; }
+    .brand { font-size:1.2rem; font-weight:700; color:var(--blue); }
+    .brand span { color:var(--aqua); }
+    .back-link { color:var(--blue); font-weight:600; }
+    .hero { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:40px; align-items:center; padding:72px 0 88px; }
+    .hero-copy h1 { font-size:clamp(2.2rem,5vw,4rem); line-height:1.08; margin-bottom:18px; }
+    .hero-copy p { color:var(--slate); font-size:1.08rem; margin-bottom:24px; max-width:580px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:14px; }
+    .btn { display:inline-block; padding:13px 24px; border-radius:999px; font-weight:700; }
+    .btn-primary { background:var(--blue); color:#fff; }
+    .btn-secondary { border:1px solid #bfdce5; color:var(--blue-dark); background:#fff; }
+    .hero-panel { background:var(--white); border:1px solid var(--line); border-radius:24px; padding:28px; box-shadow:0 18px 40px rgba(10,110,189,0.10); }
+    .hero-panel h2 { font-size:1.1rem; margin-bottom:18px; }
+    .checklist { display:grid; gap:12px; }
+    .checklist div { background:var(--bg); border-radius:14px; padding:14px 16px; border:1px solid #e5f0f4; }
+    .checklist strong { display:block; margin-bottom:4px; color:var(--blue-dark); }
+    section { padding:76px 0; }
+    .section-head { margin-bottom:34px; }
+    .section-head h2 { font-size:2rem; margin-bottom:10px; }
+    .section-head p { color:var(--slate); max-width:700px; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:24px; }
+    .card h3 { margin-bottom:10px; font-size:1.15rem; }
+    .card p, .card li { color:var(--slate); }
+    .card ul { padding-left:18px; display:grid; gap:8px; }
+    .split { display:grid; grid-template-columns:1.15fr 0.85fr; gap:24px; }
+    .feature-list { display:grid; gap:14px; }
+    .feature-item { border-left:4px solid var(--aqua); padding-left:16px; }
+    .feature-item h3 { margin-bottom:6px; }
+    .cta { background:linear-gradient(135deg,var(--blue) 0%,var(--aqua) 100%); color:#fff; border-radius:28px; padding:34px; display:flex; align-items:center; justify-content:space-between; gap:20px; }
+    .cta p { max-width:640px; opacity:0.95; }
+    footer { padding:32px 0 48px; text-align:center; color:var(--slate); }
+    @media (max-width:860px) {
+      .hero, .split, .grid-3 { grid-template-columns:1fr; }
+      .cta { flex-direction:column; align-items:flex-start; }
+    }
+    @media (max-width:640px) {
+      nav { flex-direction:column; align-items:flex-start; }
+      .hero { padding:56px 0 68px; }
+      section { padding:58px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="container"><strong>Concept Demo:</strong> This is a sample website design by Clearwater Digital for a roofing business concept. It is not a real company.</div>
+  </div>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Clearwater<span>Digital</span> / Roofing Concept</div>
+        <a class="back-link" href="../index.html">← Back to clearwaterdigital</a>
+      </nav>
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>A clean roofing website concept built to turn visits into quote requests.</h1>
+          <p>This one-page demo shows how Clearwater Digital could position a roofing company with clear services, trust-building structure, and fast mobile calls to action.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#demo-sections">Explore the concept</a>
+            <a class="btn btn-secondary" href="../index.html#contact">Ask Clearwater Digital for a version like this</a>
+          </div>
+        </div>
+        <div class="hero-panel">
+          <h2>What this concept is designed to highlight</h2>
+          <div class="checklist">
+            <div><strong>Clear service paths</strong><span>Roof repair, replacement, storm damage, and inspections are easy to find.</span></div>
+            <div><strong>Mobile-first contact flow</strong><span>Primary actions stay focused on calling or requesting an estimate.</span></div>
+            <div><strong>Honest trust signals</strong><span>Layout space is reserved for real credentials, photos, and service-area details once available.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="demo-sections">
+      <div class="container">
+        <div class="section-head">
+          <h2>Example sections for a roofer</h2>
+          <p>This concept keeps the messaging direct for homeowners who need help quickly while leaving room for real business details to be added later.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Core Services</h3>
+            <ul>
+              <li>Roof inspections and repair requests</li>
+              <li>Full roof replacement overview</li>
+              <li>Storm damage and insurance support details</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Local Visibility</h3>
+            <ul>
+              <li>Dedicated area for neighborhoods or towns served</li>
+              <li>Structured headings that support local search visibility</li>
+              <li>Simple quote forms that work well on phones</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Trust-Building Content</h3>
+            <ul>
+              <li>Space for real certifications and warranty information</li>
+              <li>Project gallery slots for actual before-and-after photos</li>
+              <li>Clear process steps that reduce homeowner uncertainty</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container split">
+        <div class="card">
+          <div class="section-head">
+            <h2>Suggested conversion flow</h2>
+            <p>A roofer site usually performs best when the user can understand the offer fast, confirm the company is legitimate, and take one next step without friction.</p>
+          </div>
+          <div class="feature-list">
+            <div class="feature-item">
+              <h3>1. Immediate problem statement</h3>
+              <p>Lead with what the business does, who it helps, and the fastest way to get an estimate.</p>
+            </div>
+            <div class="feature-item">
+              <h3>2. Service and coverage clarity</h3>
+              <p>Break down repair, replacement, and storm-related work so visitors can self-identify quickly.</p>
+            </div>
+            <div class="feature-item">
+              <h3>3. Real proof points later</h3>
+              <p>Replace placeholders with real photos, team information, licensing details, and actual reviews when available.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="section-head">
+            <h2>Content slots this concept leaves open</h2>
+          </div>
+          <ul>
+            <li>Real project photography</li>
+            <li>Actual service area list</li>
+            <li>Authentic company story</li>
+            <li>Real contact details and hours</li>
+            <li>Verified credentials and memberships</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="cta">
+          <div>
+            <h2>Need a real version of this for your roofing business?</h2>
+            <p>Clearwater Digital can turn this concept style into a tailored site with your real branding, service area, photos, and contact flow.</p>
+          </div>
+          <a class="btn btn-secondary" href="../index.html#contact">Contact Clearwater Digital</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Concept demo by Clearwater Digital.</div>
+  </footer>
+</body>
+</html>
