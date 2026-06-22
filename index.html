@@ -39,7 +39,12 @@
     .why-grid .stat { font-size:2.4rem; font-weight:700; color:var(--aqua); }
     .why-grid p { color:#b7c4d4; }
     .work { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
-    .work .item { border-radius:14px; overflow:hidden; background:#e3f3f7; height:200px; display:flex; align-items:center; justify-content:center; color:var(--blue-dark); font-weight:600; border:1px dashed var(--aqua); }
+    .work .item { display:block; border-radius:14px; background:linear-gradient(180deg,#f5fafc 0%,#e3f3f7 100%); padding:28px; color:var(--ink); border:1px solid #d8e9f0; transition:transform .25s,box-shadow .25s,border-color .25s; }
+    .work .item:hover { transform:translateY(-6px); box-shadow:0 12px 30px rgba(10,110,189,0.12); border-color:var(--aqua); }
+    .work .eyebrow { display:inline-block; font-size:0.8rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--blue); margin-bottom:14px; }
+    .work h3 { font-size:1.3rem; margin-bottom:10px; }
+    .work p { color:var(--slate); margin-bottom:18px; }
+    .work .link { color:var(--blue); font-weight:600; }
     .cta { background:linear-gradient(135deg,var(--blue) 0%,var(--aqua) 100%); color:#fff; text-align:center; }
     .cta h2 { font-size:2.2rem; margin-bottom:16px; }
     .cta p { font-size:1.15rem; margin-bottom:30px; opacity:0.95; }
@@ -100,11 +105,20 @@
   <section id="work">
     <div class="container">
       <h2 class="section-title">Our Work</h2>
-      <p class="section-sub">Sample projects. Swap these out with real client work as you grow.</p>
+      <p class="section-sub">Honest concept designs that show the kind of clean, focused websites Clearwater Digital can build.</p>
       <div class="work">
-        <div class="item">Project Showcase 1</div>
-        <div class="item">Project Showcase 2</div>
-        <div class="item">Project Showcase 3</div>
+        <a class="item" href="demos/roofing.html">
+          <span class="eyebrow">Concept Design</span>
+          <h3>Roofing Company Demo</h3>
+          <p>A modern one-page concept for a home-service roofing business focused on calls, quotes, and mobile usability.</p>
+          <span class="link">View roofing concept &rarr;</span>
+        </a>
+        <a class="item" href="demos/dental.html">
+          <span class="eyebrow">Concept Design</span>
+          <h3>Dental Practice Demo</h3>
+          <p>A polished single-page concept for a dental office built around trust, service clarity, and easy appointment actions.</p>
+          <span class="link">View dental concept &rarr;</span>
+        </a>
       </div>
     </div>
   </section>

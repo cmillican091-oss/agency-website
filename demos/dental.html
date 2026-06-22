@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dental Practice Concept Demo | Clearwater Digital</title>
+  <style>
+    :root { --blue:#0a6ebd; --blue-dark:#074e87; --aqua:#1fb6c1; --ink:#102033; --slate:#566678; --line:#dbe8ef; --bg:#f5fafc; --white:#ffffff; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:var(--ink); line-height:1.6; background:var(--white); }
+    a { color:inherit; text-decoration:none; }
+    .container { width:min(1120px,calc(100% - 40px)); margin:0 auto; }
+    .banner { background:#e6f7f8; color:var(--ink); border-bottom:1px solid #cdecef; padding:12px 0; text-align:center; font-size:0.95rem; }
+    .banner strong { color:var(--blue-dark); }
+    header { background:linear-gradient(135deg,#ffffff 0%,#edf8fb 100%); }
+    nav { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:22px 0; }
+    .brand { font-size:1.2rem; font-weight:700; color:var(--blue); }
+    .brand span { color:var(--aqua); }
+    .back-link { color:var(--blue); font-weight:600; }
+    .hero { display:grid; grid-template-columns:1.05fr 0.95fr; gap:36px; align-items:center; padding:74px 0 90px; }
+    .hero-copy h1 { font-size:clamp(2.2rem,5vw,3.9rem); line-height:1.08; margin-bottom:18px; }
+    .hero-copy p { color:var(--slate); font-size:1.08rem; margin-bottom:24px; max-width:560px; }
+    .hero-actions { display:flex; flex-wrap:wrap; gap:14px; }
+    .btn { display:inline-block; padding:13px 24px; border-radius:999px; font-weight:700; }
+    .btn-primary { background:var(--blue); color:#fff; }
+    .btn-secondary { background:#fff; color:var(--blue-dark); border:1px solid #bfdce5; }
+    .hero-card { background:#fff; border:1px solid var(--line); border-radius:26px; padding:30px; box-shadow:0 18px 40px rgba(10,110,189,0.10); }
+    .hero-card h2 { font-size:1.05rem; margin-bottom:18px; }
+    .hero-card .slot { background:var(--bg); border:1px solid #e5f0f4; border-radius:16px; padding:16px; margin-bottom:12px; }
+    .hero-card .slot strong { display:block; margin-bottom:4px; color:var(--blue-dark); }
+    section { padding:76px 0; }
+    .section-head { margin-bottom:32px; }
+    .section-head h2 { font-size:2rem; margin-bottom:10px; }
+    .section-head p { color:var(--slate); max-width:720px; }
+    .grid-3 { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:22px; }
+    .card { background:#fff; border:1px solid var(--line); border-radius:20px; padding:24px; }
+    .card h3 { margin-bottom:10px; font-size:1.15rem; }
+    .card p, .card li { color:var(--slate); }
+    .card ul { padding-left:18px; display:grid; gap:8px; }
+    .split { display:grid; grid-template-columns:0.95fr 1.05fr; gap:24px; }
+    .steps { display:grid; gap:14px; }
+    .step { border-left:4px solid var(--aqua); padding-left:16px; }
+    .step h3 { margin-bottom:6px; }
+    .highlight { background:linear-gradient(135deg,var(--blue) 0%,var(--aqua) 100%); color:#fff; border-radius:28px; padding:34px; }
+    .highlight p { opacity:0.95; margin:12px 0 24px; max-width:640px; }
+    footer { padding:32px 0 48px; text-align:center; color:var(--slate); }
+    @media (max-width:860px) {
+      .hero, .grid-3, .split { grid-template-columns:1fr; }
+    }
+    @media (max-width:640px) {
+      nav { flex-direction:column; align-items:flex-start; }
+      .hero { padding:56px 0 68px; }
+      section { padding:58px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="banner">
+    <div class="container"><strong>Concept Demo:</strong> This is a sample design by Clearwater Digital for a dental practice website. It is not a real practice.</div>
+  </div>
+  <header>
+    <div class="container">
+      <nav>
+        <div class="brand">Clearwater<span>Digital</span> / Dental Concept</div>
+        <a class="back-link" href="../index.html">← Back to clearwaterdigital</a>
+      </nav>
+      <div class="hero">
+        <div class="hero-copy">
+          <h1>A calm, modern dental website concept built around clarity and easy next steps.</h1>
+          <p>This demo shows how Clearwater Digital could present a dental practice with a welcoming first impression, streamlined service pages, and simple appointment-focused calls to action.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#demo-sections">View concept sections</a>
+            <a class="btn btn-secondary" href="../index.html#contact">Request a custom version</a>
+          </div>
+        </div>
+        <div class="hero-card">
+          <h2>Key goals of this concept</h2>
+          <div class="slot"><strong>Patient-friendly messaging</strong><span>Keep services, insurance information, and booking actions straightforward.</span></div>
+          <div class="slot"><strong>Professional visual tone</strong><span>Use clean spacing, reassuring copy, and soft accents that fit a modern practice.</span></div>
+          <div class="slot"><strong>Room for real details</strong><span>Leave space for actual dentist bios, photos, office information, and verified patient feedback.</span></div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section id="demo-sections">
+      <div class="container">
+        <div class="section-head">
+          <h2>Example structure for a dental practice</h2>
+          <p>This concept is arranged to answer common patient questions quickly while guiding them toward scheduling, calling, or learning more about available services.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <h3>Service Overview</h3>
+            <ul>
+              <li>Preventive care and cleanings</li>
+              <li>Restorative dentistry and urgent visits</li>
+              <li>Cosmetic or family-focused treatment pages</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Patient Confidence</h3>
+            <ul>
+              <li>Clear new-patient expectations</li>
+              <li>Space for real provider bios and credentials</li>
+              <li>Easy access to forms, policies, and insurance details</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h3>Appointment Actions</h3>
+            <ul>
+              <li>Persistent call or booking prompts on mobile</li>
+              <li>Simple contact forms with low friction</li>
+              <li>Quick office details for maps, parking, and hours</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container split">
+        <div class="card">
+          <div class="section-head">
+            <h2>Content this design can support</h2>
+          </div>
+          <ul>
+            <li>Real team photography and office images</li>
+            <li>Authentic patient resources and FAQs</li>
+            <li>True location and contact information</li>
+            <li>Verified awards, memberships, or certifications</li>
+            <li>Real online scheduling or contact workflows</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="section-head">
+            <h2>Suggested page flow</h2>
+            <p>A dental practice site works best when visitors feel comfortable fast and can immediately find practical information.</p>
+          </div>
+          <div class="steps">
+            <div class="step">
+              <h3>1. Reassure at the top</h3>
+              <p>Lead with a welcoming message, clear services, and the simplest way to book or call.</p>
+            </div>
+            <div class="step">
+              <h3>2. Remove friction</h3>
+              <p>Surface office details, patient forms, and insurance information before visitors have to hunt for them.</p>
+            </div>
+            <div class="step">
+              <h3>3. Add real proof later</h3>
+              <p>Swap in actual bios, photos, testimonials, and credentials once the practice provides them.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="highlight">
+          <h2>Want this style tailored to a real dental practice?</h2>
+          <p>Clearwater Digital can adapt this concept into a finished website using a practice's actual branding, providers, office details, and patient experience goals.</p>
+          <a class="btn btn-secondary" href="../index.html#contact">Talk with Clearwater Digital</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">Concept demo by Clearwater Digital.</div>
+  </footer>
+</body>
+</html>
