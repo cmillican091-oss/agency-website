@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clearwater Digital — Clean, Modern Websites for Growing Businesses</title>
+  <style>
+    :root { --blue:#0a6ebd; --blue-dark:#074e87; --aqua:#1fb6c1; --ink:#0f1b2d; --slate:#4a5a6a; --bg:#f5fafc; --white:#ffffff; }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family:'Segoe UI',system-ui,-apple-system,sans-serif; color:var(--ink); line-height:1.6; background:var(--white); }
+    a { text-decoration:none; color:inherit; }
+    .container { max-width:1100px; margin:0 auto; padding:0 24px; }
+    header { position:sticky; top:0; background:rgba(255,255,255,0.95); backdrop-filter:blur(8px); border-bottom:1px solid #e6eef2; z-index:100; }
+    nav { display:flex; align-items:center; justify-content:space-between; padding:18px 24px; max-width:1100px; margin:0 auto; }
+    .logo { font-size:1.4rem; font-weight:700; color:var(--blue); display:flex; align-items:center; gap:8px; }
+    .logo span { color:var(--aqua); }
+    .nav-links { display:flex; gap:28px; }
+    .nav-links a { color:var(--slate); font-weight:500; transition:color .2s; }
+    .nav-links a:hover { color:var(--blue); }
+    .btn { display:inline-block; background:var(--blue); color:#fff; padding:12px 26px; border-radius:8px; font-weight:600; transition:background .2s,transform .2s; }
+    .btn:hover { background:var(--blue-dark); transform:translateY(-2px); }
+    .hero { background:linear-gradient(135deg,var(--bg) 0%,#e3f3f7 100%); padding:100px 0 90px; text-align:center; }
+    .hero h1 { font-size:3rem; line-height:1.15; margin-bottom:20px; }
+    .hero h1 .accent { color:var(--blue); }
+    .hero p { font-size:1.25rem; color:var(--slate); max-width:640px; margin:0 auto 36px; }
+    section { padding:80px 0; }
+    .section-title { text-align:center; font-size:2.1rem; margin-bottom:14px; }
+    .section-sub { text-align:center; color:var(--slate); max-width:600px; margin:0 auto 50px; }
+    .services { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:28px; }
+    .card { background:var(--white); border:1px solid #e6eef2; border-radius:14px; padding:34px 28px; transition:transform .25s,box-shadow .25s; }
+    .card:hover { transform:translateY(-6px); box-shadow:0 12px 30px rgba(10,110,189,0.12); }
+    .card .icon { font-size:2rem; margin-bottom:16px; }
+    .card h3 { font-size:1.25rem; margin-bottom:10px; }
+    .card p { color:var(--slate); font-size:0.98rem; }
+    .why { background:var(--ink); color:#fff; }
+    .why .section-title, .why .section-sub { color:#fff; }
+    .why .section-sub { color:#b7c4d4; }
+    .why-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:30px; text-align:center; }
+    .why-grid .stat { font-size:2.4rem; font-weight:700; color:var(--aqua); }
+    .why-grid p { color:#b7c4d4; }
+    .work { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:24px; }
+    .work .item { border-radius:14px; overflow:hidden; background:#e3f3f7; height:200px; display:flex; align-items:center; justify-content:center; color:var(--blue-dark); font-weight:600; border:1px dashed var(--aqua); }
+    .cta { background:linear-gradient(135deg,var(--blue) 0%,var(--aqua) 100%); color:#fff; text-align:center; }
+    .cta h2 { font-size:2.2rem; margin-bottom:16px; }
+    .cta p { font-size:1.15rem; margin-bottom:30px; opacity:0.95; }
+    .cta .btn { background:#fff; color:var(--blue); }
+    .cta .btn:hover { background:#f0f0f0; }
+    footer { background:var(--ink); color:#8ea0b3; padding:40px 0; text-align:center; font-size:0.95rem; }
+    footer a { color:var(--aqua); }
+    @media (max-width:640px){ .hero h1 { font-size:2.1rem; } .nav-links { display:none; } }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">Clearwater<span>Digital</span></div>
+      <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#why">Why Us</a>
+        <a href="#work">Our Work</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <a href="#contact" class="btn">Get a Quote</a>
+    </nav>
+  </header>
+  <section class="hero">
+    <div class="container">
+      <h1>Clean, modern websites that <span class="accent">win you customers</span></h1>
+      <p>Clearwater Digital builds fast, beautiful, mobile-friendly websites for small and growing businesses. No jargon, no headaches.</p>
+      <a href="#contact" class="btn">Start Your Project</a>
+    </div>
+  </section>
+  <section id="services">
+    <div class="container">
+      <h2 class="section-title">What We Do</h2>
+      <p class="section-sub">Everything you need to get online and get found.</p>
+      <div class="services">
+        <div class="card"><div class="icon">&#127912;</div><h3>Custom Website Design</h3><p>A unique, professional site designed around your brand.</p></div>
+        <div class="card"><div class="icon">&#128260;</div><h3>Website Redesigns</h3><p>We modernize outdated sites to look great and load fast.</p></div>
+        <div class="card"><div class="icon">&#128241;</div><h3>Mobile-First Builds</h3><p>Every site looks flawless on phones and tablets.</p></div>
+        <div class="card"><div class="icon">&#128269;</div><h3>Local SEO Setup</h3><p>Help your business show up when nearby customers search.</p></div>
+        <div class="card"><div class="icon">&#9889;</div><h3>Speed & Performance</h3><p>Lightning-fast load times that keep visitors engaged.</p></div>
+        <div class="card"><div class="icon">&#128296;</div><h3>Ongoing Support</h3><p>Updates, maintenance, and a real person to call.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="why" class="why">
+    <div class="container">
+      <h2 class="section-title">Why Clearwater Digital</h2>
+      <p class="section-sub">Simple, transparent, and built around results.</p>
+      <div class="why-grid">
+        <div><div class="stat">Fast</div><p>Most sites launched in 2-3 weeks, not months.</p></div>
+        <div><div class="stat">Clear</div><p>Upfront pricing with no surprise fees, ever.</p></div>
+        <div><div class="stat">Local</div><p>Personal service from a team that picks up the phone.</p></div>
+        <div><div class="stat">Yours</div><p>You own your website and everything we build.</p></div>
+      </div>
+    </div>
+  </section>
+  <section id="work">
+    <div class="container">
+      <h2 class="section-title">Our Work</h2>
+      <p class="section-sub">Sample projects. Swap these out with real client work as you grow.</p>
+      <div class="work">
+        <div class="item">Project Showcase 1</div>
+        <div class="item">Project Showcase 2</div>
+        <div class="item">Project Showcase 3</div>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="cta">
+    <div class="container">
+      <h2>Ready for a website that works?</h2>
+      <p>Let's talk about your project. Get a free, no-pressure quote today.</p>
+      <a href="mailto:YOUR-EMAIL-HERE@example.com" class="btn">Email Us</a>
+    </div>
+  </section>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Clearwater Digital. All rights reserved.</p>
+      <p style="margin-top:8px;">Contact: <a href="mailto:YOUR-EMAIL-HERE@example.com">YOUR-EMAIL-HERE@example.com</a></p>
+    </div>
+  </footer>
+</body>
+</html>
