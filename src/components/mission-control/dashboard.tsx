@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Activity,
@@ -67,7 +67,10 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const statusVariant: Record<AgentStatus, "default" | "secondary" | "warning" | "destructive"> = {
+const statusVariant: Record<
+  AgentStatus,
+  "default" | "secondary" | "warning" | "destructive" | "success"
+> = {
   Working: "default",
   Waiting: "secondary",
   Error: "destructive",
@@ -348,7 +351,7 @@ function AgentDetailSheet({
   );
 }
 
-function RevenuePanel() {
+function RevenuePanel({ chartsReady }: { chartsReady: boolean }) {
   return (
     <Card className="glass-border scanline relative overflow-hidden rounded-[30px]">
       <CardHeader>
@@ -364,38 +367,52 @@ function RevenuePanel() {
       </CardHeader>
       <CardContent className="grid gap-6 xl:grid-cols-[minmax(0,1.5fr)_280px]">
         <div className="h-[280px] rounded-[24px] border border-white/8 bg-black/20 p-3">
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={revenueTrend}>
-              <defs>
-                <linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.7} />
-                  <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
-              <XAxis dataKey="label" stroke="#94a3b8" tickLine={false} axisLine={false} />
-              <YAxis
-                stroke="#94a3b8"
-                tickLine={false}
-                axisLine={false}
-                tickFormatter={(value) => `$${value / 1000}k`}
-              />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "rgba(2, 6, 23, 0.92)",
-                  border: "1px solid rgba(34,211,238,0.2)",
-                  borderRadius: "18px",
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="revenue"
-                stroke="#22d3ee"
-                strokeWidth={3}
-                fill="url(#revenueFill)"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
+          {chartsReady ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={revenueTrend}>
+                <defs>
+                  <linearGradient id="revenueFill" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="5%" stopColor="#22d3ee" stopOpacity={0.7} />
+                    <stop offset="95%" stopColor="#22d3ee" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid stroke="rgba(148,163,184,0.12)" vertical={false} />
+                <XAxis dataKey="label" stroke="#94a3b8" tickLine={false} axisLine={false} />
+                <YAxis
+                  stroke="#94a3b8"
+                  tickLine={false}
+                  axisLine={false}
+                  tickFormatter={(value) => `$${value / 1000}k`}
+                />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "rgba(2, 6, 23, 0.92)",
+                    border: "1px solid rgba(34,211,238,0.2)",
+                    borderRadius: "18px",
+                  }}
+                />
+                <Area
+                  type="monotone"
+                  dataKey="revenue"
+                  stroke="#22d3ee"
+                  strokeWidth={3}
+                  fill="url(#revenueFill)"
+                />
+              </AreaChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex h-full items-end gap-3">
+              {revenueTrend.map((item) => (
+                <div key={item.label} className="flex flex-1 flex-col items-center gap-3">
+                  <div
+                    className="w-full rounded-t-2xl bg-gradient-to-t from-cyan-500/20 to-cyan-300/70"
+                    style={{ height: `${Math.max(24, item.revenue / 120)}px` }}
+                  />
+                  <span className="font-mono text-xs text-slate-500">{item.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
         <div className="space-y-4">
           <div className="rounded-[24px] border border-white/8 bg-white/[0.03] p-5">
@@ -408,21 +425,34 @@ function RevenuePanel() {
             </p>
           </div>
           <div className="h-[170px] rounded-[24px] border border-white/8 bg-black/20 p-3">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={revenueTrend}>
-                <CartesianGrid stroke="rgba(148,163,184,0.08)" vertical={false} />
-                <XAxis dataKey="label" hide />
-                <YAxis hide />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "rgba(2, 6, 23, 0.92)",
-                    border: "1px solid rgba(34,211,238,0.2)",
-                    borderRadius: "18px",
-                  }}
-                />
-                <Bar dataKey="pipeline" fill="#a855f7" radius={[12, 12, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
+            {chartsReady ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={revenueTrend}>
+                  <CartesianGrid stroke="rgba(148,163,184,0.08)" vertical={false} />
+                  <XAxis dataKey="label" hide />
+                  <YAxis hide />
+                  <Tooltip
+                    contentStyle={{
+                      backgroundColor: "rgba(2, 6, 23, 0.92)",
+                      border: "1px solid rgba(34,211,238,0.2)",
+                      borderRadius: "18px",
+                    }}
+                  />
+                  <Bar dataKey="pipeline" fill="#a855f7" radius={[12, 12, 0, 0]} />
+                </BarChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex h-full items-end gap-3">
+                {revenueTrend.map((item) => (
+                  <div key={item.label} className="flex flex-1 flex-col items-center justify-end gap-2">
+                    <div
+                      className="w-full rounded-t-2xl bg-gradient-to-t from-violet-500/30 to-violet-300/80"
+                      style={{ height: `${Math.max(18, item.pipeline * 7)}px` }}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </CardContent>
@@ -438,6 +468,11 @@ export function MissionControlDashboard() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [uptimeSeconds, setUptimeSeconds] = useState(438_210);
+  const chartsReady = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
 
   useEffect(() => {
     let step = 0;
@@ -466,6 +501,14 @@ export function MissionControlDashboard() {
             second: "2-digit",
             hour12: false,
           });
+          const nextLevel: AgentRecord["logs"][number]["level"] =
+            nextStatus === "Error"
+              ? "error"
+              : nextStatus === "Complete"
+                ? "success"
+                : nextStatus === "Waiting"
+                  ? "warning"
+                  : "info";
 
           return {
             ...agent,
@@ -480,14 +523,7 @@ export function MissionControlDashboard() {
               ? [
                   {
                     time: eventTime,
-                    level:
-                      nextStatus === "Error"
-                        ? "error"
-                        : nextStatus === "Complete"
-                          ? "success"
-                          : nextStatus === "Waiting"
-                            ? "warning"
-                            : "info",
+                    level: nextLevel,
                     message: `${nextStatus} • ${nextTask}`,
                   },
                   ...agent.logs,
@@ -518,6 +554,8 @@ export function MissionControlDashboard() {
         minute: "2-digit",
         hour12: false,
       });
+      const tone: FeedItem["tone"] =
+        step % 4 === 0 ? "success" : step % 5 === 0 ? "warning" : "info";
 
       setFeed((current) =>
         [
@@ -526,7 +564,7 @@ export function MissionControlDashboard() {
             source: activeAgent.name,
             message: `${realtimeTaskMap[activeAgent.id][step % realtimeTaskMap[activeAgent.id].length]} heartbeat acknowledged by orchestration mesh.`,
             timestamp,
-            tone: step % 4 === 0 ? "success" : step % 5 === 0 ? "warning" : "info",
+            tone,
           },
           ...current,
         ].slice(0, 10),
@@ -719,7 +757,7 @@ export function MissionControlDashboard() {
               </Card>
 
               <div className="grid gap-6 2xl:grid-cols-[minmax(0,1.4fr)_minmax(320px,0.8fr)]">
-                <RevenuePanel />
+                <RevenuePanel chartsReady={chartsReady} />
 
                 <Card className="glass-border rounded-[30px]">
                   <CardHeader>
