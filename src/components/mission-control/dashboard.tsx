@@ -574,11 +574,6 @@ export function MissionControlDashboard() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailTab, setDetailTab] = useState("chat");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const agentChatsRef = useRef(agentChats);
-
-  useEffect(() => {
-    agentChatsRef.current = agentChats;
-  }, [agentChats]);
 
   const selectedAgent = useMemo(
     () => agents.find((agent) => agent.id === selectedAgentId) ?? agents[0],
@@ -632,21 +627,33 @@ export function MissionControlDashboard() {
     }
 
     const agentId = selectedAgent.id;
-    const currentSession = agentChatsRef.current[agentId] ?? createChatSession();
-    const draft = currentSession.draft.trim();
+    const agentName = selectedAgent.name;
+    let nextMessages: AgentChatMessage[] = [];
 
-    if (!draft || currentSession.isLoading) {
+    setAgentChats((current) => {
+      const currentSession = current[agentId] ?? createChatSession();
+      const draft = currentSession.draft.trim();
+
+      if (!draft || currentSession.isLoading) {
+        return current;
+      }
+
+      nextMessages = [...currentSession.messages, { role: "user", content: draft }];
+
+      return {
+        ...current,
+        [agentId]: {
+          ...currentSession,
+          draft: "",
+          isLoading: true,
+          messages: nextMessages,
+        },
+      };
+    });
+
+    if (nextMessages.length === 0) {
       return;
     }
-
-    const nextMessages: AgentChatMessage[] = [...currentSession.messages, { role: "user", content: draft }];
-
-    updateAgentChat(agentId, (session) => ({
-      ...session,
-      draft: "",
-      isLoading: true,
-      messages: [...session.messages, { role: "user", content: draft }],
-    }));
 
     try {
       const response = await fetch(`/api/agents/${agentId}/chat`, {
@@ -667,9 +674,9 @@ export function MissionControlDashboard() {
           response.status === 400
             ? "Please review your message and try again."
             : response.status === 404
-              ? `${selectedAgent.name} is unavailable right now.`
+              ? `${agentName} is unavailable right now.`
               : response.status === 500
-                ? `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`
+                ? `${agentName} couldn't respond right now. Please try again in a moment.`
                 : `Chat request failed with status ${response.status}. Please try again.`;
 
         throw new Error(data?.message ?? fallbackMessage);
@@ -678,7 +685,7 @@ export function MissionControlDashboard() {
       const reply = data?.reply?.trim();
 
       if (!reply) {
-        throw new Error(`${selectedAgent.name} returned an empty response. Please try again.`);
+        throw new Error(`${agentName} returned an empty response. Please try again.`);
       }
 
       updateAgentChat(agentId, (session) => ({
@@ -692,7 +699,7 @@ export function MissionControlDashboard() {
           ? "We couldn't reach this agent right now. Please check your connection and try again."
           : error instanceof Error
             ? error.message
-            : `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`;
+            : `${agentName} couldn't respond right now. Please try again in a moment.`;
 
       updateAgentChat(agentId, (session) => ({
         ...session,
