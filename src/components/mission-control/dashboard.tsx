@@ -188,7 +188,7 @@ function AgentChatPanel({
             <div className="space-y-3">
               {session.messages.map((message, index) => (
                 <div
-                  key={`${message.role}-${index}-${message.content}`}
+                  key={`${message.role}-${index}`}
                   className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}
                 >
                   <div
@@ -434,7 +434,6 @@ function AgentDetailSheet({
             <TabsTrigger value="history">History</TabsTrigger>
             <TabsTrigger value="queue">Queue</TabsTrigger>
           </TabsList>
-
 
           <TabsContent value="chat">
             <AgentChatPanel
