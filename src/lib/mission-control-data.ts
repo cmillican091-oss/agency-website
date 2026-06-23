@@ -99,7 +99,7 @@ const makeAgent = (id: string, name: string, role: string, room: string, floor: 
   floor,
   zone,
   efficiency: 0,
-  model: "-",
+  model: "Not connected",
   integrations: [],
   queue: [],
   logs: [],

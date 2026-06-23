@@ -14,7 +14,18 @@ import {
 
 import { revenueTrend } from "@/lib/mission-control-data";
 
+function getWeeklyUplift() {
+  const firstRevenue = revenueTrend[0]?.revenue ?? 0;
+  const lastRevenue = revenueTrend[revenueTrend.length - 1]?.revenue ?? 0;
+
+  return firstRevenue > 0 ? ((lastRevenue - firstRevenue) / firstRevenue) * 100 : 0;
+}
+
 export function RevenuePanelCharts() {
+  const totalRevenue = revenueTrend.reduce((sum, item) => sum + item.revenue, 0);
+  const totalPipeline = revenueTrend.reduce((sum, item) => sum + item.pipeline, 0);
+  const weeklyUplift = getWeeklyUplift();
+
   return (
     <>
       <div className="h-[280px] rounded-[24px] border border-white/8 bg-black/20 p-3">
@@ -56,9 +67,13 @@ export function RevenuePanelCharts() {
           <p className="font-mono text-[11px] uppercase tracking-[0.28em] text-slate-400">
             Weekly Uplift
           </p>
-          <p className="mt-2 text-3xl font-semibold text-slate-50">+18.4%</p>
+          <p className="mt-2 text-3xl font-semibold text-slate-50">
+            {`${weeklyUplift > 0 ? "+" : ""}${weeklyUplift.toFixed(1)}%`}
+          </p>
           <p className="mt-1 text-sm text-slate-400">
-            Revenue acceleration led by Store Manager and Analytics Agent.
+            {totalRevenue === 0 && totalPipeline === 0
+              ? "No revenue data yet."
+              : "Revenue and pipeline reflect mission-control data."}
           </p>
         </div>
         <div className="h-[170px] rounded-[24px] border border-white/8 bg-black/20 p-3">
