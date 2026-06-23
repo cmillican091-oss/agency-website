@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import {
@@ -17,7 +17,9 @@ import {
   Layers2,
   Menu,
   Radar,
+  LoaderCircle,
   RefreshCcw,
+  SendHorizontal,
   ServerCog,
   ShieldCheck,
   Sparkles,
@@ -132,6 +134,138 @@ const pulseClasses: Record<AgentStatus, string> = {
   Complete: "bg-emerald-400 shadow-[0_0_14px_rgba(52,211,153,0.85)]",
 };
 
+type AgentChatRole = "user" | "assistant";
+
+interface AgentChatMessage {
+  role: AgentChatRole;
+  content: string;
+  isError?: boolean;
+}
+
+interface AgentChatSession {
+  draft: string;
+  isLoading: boolean;
+  messages: AgentChatMessage[];
+}
+
+function createChatSession(): AgentChatSession {
+  return {
+    draft: "",
+    isLoading: false,
+    messages: [],
+  };
+}
+
+function createInitialChatState(agents: AgentRecord[]) {
+  return Object.fromEntries(agents.map((agent) => [agent.id, createChatSession()])) as Record<
+    string,
+    AgentChatSession
+  >;
+}
+
+function AgentChatPanel({
+  agent,
+  session,
+  onDraftChange,
+  onSubmit,
+}: {
+  agent: AgentRecord;
+  session: AgentChatSession;
+  onDraftChange: (value: string) => void;
+  onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+}) {
+  const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, [session.isLoading, session.messages]);
+
+  return (
+    <Card className="rounded-3xl">
+      <CardContent className="space-y-4 pt-6">
+        <ScrollArea className="h-[340px] pr-4">
+          {session.messages.length > 0 ? (
+            <div className="space-y-3">
+              {session.messages.map((message, index) => (
+                <div
+                  key={`${message.role}-${index}-${message.content}`}
+                  className={cn("flex", message.role === "user" ? "justify-end" : "justify-start")}
+                >
+                  <div
+                    className={cn(
+                      "max-w-[85%] rounded-[24px] border px-4 py-3 text-sm leading-6 whitespace-pre-wrap",
+                      message.role === "user"
+                        ? "border-cyan-300/20 bg-cyan-400/10 text-cyan-50"
+                        : message.isError
+                          ? "border-rose-400/30 bg-rose-500/10 text-rose-100"
+                          : "border-white/8 bg-white/[0.03] text-slate-200",
+                    )}
+                  >
+                    <p className="mb-2 font-mono text-[11px] uppercase tracking-[0.28em] text-slate-400">
+                      {message.role === "user" ? "You" : agent.name}
+                    </p>
+                    <p>{message.content}</p>
+                  </div>
+                </div>
+              ))}
+              {session.isLoading ? (
+                <div className="flex justify-start">
+                  <div className="flex max-w-[85%] items-center gap-3 rounded-[24px] border border-white/8 bg-white/[0.03] px-4 py-3 text-sm text-slate-200">
+                    <LoaderCircle className="size-4 animate-spin text-cyan-300" />
+                    <span>{agent.name} is typing…</span>
+                  </div>
+                </div>
+              ) : null}
+              <div ref={bottomRef} />
+            </div>
+          ) : (
+            <div className="space-y-3">
+              <EmptyState
+                title="No conversation yet"
+                description={`Start chatting with ${agent.name} for ${agent.role.toLowerCase()} support.`}
+              />
+              {session.isLoading ? (
+                <div className="flex justify-start">
+                  <div className="flex max-w-[85%] items-center gap-3 rounded-[24px] border border-white/8 bg-white/[0.03] px-4 py-3 text-sm text-slate-200">
+                    <LoaderCircle className="size-4 animate-spin text-cyan-300" />
+                    <span>{agent.name} is typing…</span>
+                  </div>
+                </div>
+              ) : null}
+              <div ref={bottomRef} />
+            </div>
+          )}
+        </ScrollArea>
+
+        <form onSubmit={onSubmit} className="space-y-3">
+          <textarea
+            value={session.draft}
+            onChange={(event) => onDraftChange(event.target.value)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" && !event.shiftKey) {
+                event.preventDefault();
+                event.currentTarget.form?.requestSubmit();
+              }
+            }}
+            placeholder={`Message ${agent.name} about ${agent.role.toLowerCase()}...`}
+            className="min-h-28 w-full rounded-[24px] border border-white/10 bg-black/20 px-4 py-3 text-sm text-slate-100 outline-none transition placeholder:text-slate-500 focus:border-cyan-300/40 focus:bg-black/30"
+            disabled={session.isLoading}
+          />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <p className="text-xs leading-5 text-slate-400">
+              Each workstation keeps its own conversation history for this dashboard session.
+            </p>
+            <Button type="submit" disabled={session.isLoading || !session.draft.trim()}>
+              {session.isLoading ? <LoaderCircle className="size-4 animate-spin" /> : <SendHorizontal className="size-4" />}
+              Send
+            </Button>
+          </div>
+        </form>
+      </CardContent>
+    </Card>
+  );
+}
+
 function DashboardSidebar() {
   return (
     <div className="flex h-full flex-col gap-6">
@@ -229,12 +363,22 @@ function EmptyState({
 
 function AgentDetailSheet({
   agent,
+  chatSession,
+  detailTab,
   open,
+  onChatDraftChange,
+  onChatSubmit,
   onOpenChange,
+  onTabChange,
 }: {
   agent?: AgentRecord;
+  chatSession: AgentChatSession;
+  detailTab: string;
   open: boolean;
+  onChatDraftChange: (value: string) => void;
+  onChatSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onOpenChange: (value: boolean) => void;
+  onTabChange: (value: string) => void;
 }) {
   if (!agent) {
     return null;
@@ -283,12 +427,23 @@ function AgentDetailSheet({
           </Card>
         </div>
 
-        <Tabs defaultValue="logs">
+        <Tabs value={detailTab} onValueChange={onTabChange}>
           <TabsList className="w-fit">
+            <TabsTrigger value="chat">Chat</TabsTrigger>
             <TabsTrigger value="logs">Logs</TabsTrigger>
             <TabsTrigger value="history">History</TabsTrigger>
             <TabsTrigger value="queue">Queue</TabsTrigger>
           </TabsList>
+
+
+          <TabsContent value="chat">
+            <AgentChatPanel
+              agent={agent}
+              session={chatSession}
+              onDraftChange={onChatDraftChange}
+              onSubmit={onChatSubmit}
+            />
+          </TabsContent>
 
           <TabsContent value="logs">
             <Card className="rounded-3xl">
@@ -414,7 +569,11 @@ export function MissionControlDashboard() {
   const feed = activityFeed;
   const alerts = systemAlerts;
   const [selectedAgentId, setSelectedAgentId] = useState(missionAgents[0]?.id);
+  const [agentChats, setAgentChats] = useState<Record<string, AgentChatSession>>(() =>
+    createInitialChatState(missionAgents),
+  );
   const [detailOpen, setDetailOpen] = useState(false);
+  const [detailTab, setDetailTab] = useState("chat");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
   const selectedAgent = useMemo(
@@ -446,6 +605,86 @@ export function MissionControlDashboard() {
         }, {}),
     [agents],
   );
+  const selectedChatSession = selectedAgent
+    ? agentChats[selectedAgent.id] ?? createChatSession()
+    : createChatSession();
+
+  const updateAgentChat = (agentId: string, updater: (session: AgentChatSession) => AgentChatSession) => {
+    setAgentChats((current) => {
+      const existing = current[agentId] ?? createChatSession();
+
+      return {
+        ...current,
+        [agentId]: updater(existing),
+      };
+    });
+  };
+
+  const handleAgentChatSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    if (!selectedAgent) {
+      return;
+    }
+
+    const agentId = selectedAgent.id;
+    const draft = selectedChatSession.draft.trim();
+
+    if (!draft || selectedChatSession.isLoading) {
+      return;
+    }
+
+    const nextMessages: AgentChatMessage[] = [...selectedChatSession.messages, { role: "user", content: draft }];
+
+    updateAgentChat(agentId, () => ({
+      draft: "",
+      isLoading: true,
+      messages: nextMessages,
+    }));
+
+    try {
+      const response = await fetch(`/api/agents/${agentId}/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          agentId,
+          messages: nextMessages.map(({ content, role }) => ({ content, role })),
+        }),
+      });
+
+      const data = (await response.json().catch(() => null)) as { message?: string; reply?: string } | null;
+
+      if (!response.ok) {
+        throw new Error(data?.message ?? `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`);
+      }
+
+      const reply = data?.reply?.trim();
+
+      if (!reply) {
+        throw new Error(`${selectedAgent.name} returned an empty response. Please try again.`);
+      }
+
+      updateAgentChat(agentId, (session) => ({
+        ...session,
+        isLoading: false,
+        messages: [...session.messages, { role: "assistant", content: reply }],
+      }));
+    } catch (error) {
+      const message =
+        error instanceof Error
+          ? error.message
+          : `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`;
+
+      updateAgentChat(agentId, (session) => ({
+        ...session,
+        isLoading: false,
+        messages: [...session.messages, { role: "assistant", content: message, isError: true }],
+      }));
+    }
+  };
+
   const networkMetric = vpsHealth.find((metric) => metric.label.toLowerCase().includes("network"));
   const packetLoss = `${networkMetric?.value ?? 0}%`;
   const failoverReadiness =
@@ -547,6 +786,7 @@ export function MissionControlDashboard() {
                                 whileHover={{ y: -3 }}
                                 onClick={() => {
                                   setSelectedAgentId(agent.id);
+                                  setDetailTab("chat");
                                   setDetailOpen(true);
                                 }}
                                 className={cn(
@@ -921,7 +1161,25 @@ export function MissionControlDashboard() {
         </div>
       </div>
 
-      <AgentDetailSheet agent={selectedAgent} open={detailOpen} onOpenChange={setDetailOpen} />
+      <AgentDetailSheet
+        agent={selectedAgent}
+        chatSession={selectedChatSession}
+        detailTab={detailTab}
+        open={detailOpen}
+        onChatDraftChange={(value) => {
+          if (!selectedAgent) {
+            return;
+          }
+
+          updateAgentChat(selectedAgent.id, (session) => ({
+            ...session,
+            draft: value,
+          }));
+        }}
+        onChatSubmit={handleAgentChatSubmit}
+        onOpenChange={setDetailOpen}
+        onTabChange={setDetailTab}
+      />
     </main>
   );
 }
