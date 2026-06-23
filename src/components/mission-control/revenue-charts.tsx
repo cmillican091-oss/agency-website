@@ -14,14 +14,18 @@ import {
 
 import { revenueTrend } from "@/lib/mission-control-data";
 
-const totalRevenue = revenueTrend.reduce((sum, item) => sum + item.revenue, 0);
-const totalPipeline = revenueTrend.reduce((sum, item) => sum + item.pipeline, 0);
-const firstRevenue = revenueTrend[0]?.revenue ?? 0;
-const lastRevenue = revenueTrend[revenueTrend.length - 1]?.revenue ?? 0;
-const weeklyUplift =
-  firstRevenue > 0 ? ((lastRevenue - firstRevenue) / firstRevenue) * 100 : 0;
+function getWeeklyUplift() {
+  const firstRevenue = revenueTrend[0]?.revenue ?? 0;
+  const lastRevenue = revenueTrend[revenueTrend.length - 1]?.revenue ?? 0;
+
+  return firstRevenue > 0 ? ((lastRevenue - firstRevenue) / firstRevenue) * 100 : 0;
+}
 
 export function RevenuePanelCharts() {
+  const totalRevenue = revenueTrend.reduce((sum, item) => sum + item.revenue, 0);
+  const totalPipeline = revenueTrend.reduce((sum, item) => sum + item.pipeline, 0);
+  const weeklyUplift = getWeeklyUplift();
+
   return (
     <>
       <div className="h-[280px] rounded-[24px] border border-white/8 bg-black/20 p-3">

@@ -446,19 +446,12 @@ export function MissionControlDashboard() {
         }, {}),
     [agents],
   );
-  const packetLoss = useMemo(() => {
-    const networkMetric = vpsHealth.find((metric) => metric.label.toLowerCase().includes("network"));
-    return `${networkMetric?.value ?? 0}%`;
-  }, []);
-  const failoverReadiness = useMemo(() => {
-    if (vpsHealth.length === 0) {
-      return "0%";
-    }
-
-    const averageHealth =
-      vpsHealth.reduce((sum, metric) => sum + metric.value, 0) / vpsHealth.length;
-    return `${Math.round(averageHealth)}%`;
-  }, []);
+  const networkMetric = vpsHealth.find((metric) => metric.label.toLowerCase().includes("network"));
+  const packetLoss = `${networkMetric?.value ?? 0}%`;
+  const failoverReadiness =
+    vpsHealth.length > 0
+      ? `${Math.round(vpsHealth.reduce((sum, metric) => sum + metric.value, 0) / vpsHealth.length)}%`
+      : "0%";
 
   return (
     <main id="main-content" className="min-h-screen overflow-hidden bg-[#030712] text-slate-50">
