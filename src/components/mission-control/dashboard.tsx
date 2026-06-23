@@ -253,7 +253,7 @@ function AgentChatPanel({
           />
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-5 text-slate-400">
-              Each workstation keeps its own conversation history for this dashboard session.
+              Each workstation keeps its own conversation history for the current browser session and loses it on refresh.
             </p>
             <Button type="submit" disabled={session.isLoading || !session.draft.trim()}>
               {session.isLoading ? <LoaderCircle className="size-4 animate-spin" /> : <SendHorizontal className="size-4" />}
@@ -574,6 +574,11 @@ export function MissionControlDashboard() {
   const [detailOpen, setDetailOpen] = useState(false);
   const [detailTab, setDetailTab] = useState("chat");
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const agentChatsRef = useRef(agentChats);
+
+  useEffect(() => {
+    agentChatsRef.current = agentChats;
+  }, [agentChats]);
 
   const selectedAgent = useMemo(
     () => agents.find((agent) => agent.id === selectedAgentId) ?? agents[0],
@@ -627,18 +632,20 @@ export function MissionControlDashboard() {
     }
 
     const agentId = selectedAgent.id;
-    const draft = selectedChatSession.draft.trim();
+    const currentSession = agentChatsRef.current[agentId] ?? createChatSession();
+    const draft = currentSession.draft.trim();
 
-    if (!draft || selectedChatSession.isLoading) {
+    if (!draft || currentSession.isLoading) {
       return;
     }
 
-    const nextMessages: AgentChatMessage[] = [...selectedChatSession.messages, { role: "user", content: draft }];
+    const nextMessages: AgentChatMessage[] = [...currentSession.messages, { role: "user", content: draft }];
 
-    updateAgentChat(agentId, () => ({
+    updateAgentChat(agentId, (session) => ({
+      ...session,
       draft: "",
       isLoading: true,
-      messages: nextMessages,
+      messages: [...session.messages, { role: "user", content: draft }],
     }));
 
     try {
@@ -677,7 +684,7 @@ export function MissionControlDashboard() {
       updateAgentChat(agentId, (session) => ({
         ...session,
         isLoading: false,
-        messages: [...session.messages, { role: "assistant", content: reply }],
+        messages: [...nextMessages, { role: "assistant", content: reply }],
       }));
     } catch (error) {
       const message =
@@ -690,7 +697,7 @@ export function MissionControlDashboard() {
       updateAgentChat(agentId, (session) => ({
         ...session,
         isLoading: false,
-        messages: [...session.messages, { role: "assistant", content: message, isError: true }],
+        messages: [...nextMessages, { role: "assistant", content: message, isError: true }],
       }));
     }
   };
