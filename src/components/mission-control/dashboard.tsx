@@ -253,7 +253,7 @@ function AgentChatPanel({
           />
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-5 text-slate-400">
-              Each workstation keeps its own conversation history for the current browser session and loses it on refresh.
+              Each workstation maintains its own conversation history for the current browser session, which is lost on refresh.
             </p>
             <Button type="submit" disabled={session.isLoading || !session.draft.trim()}>
               {session.isLoading ? <LoaderCircle className="size-4 animate-spin" /> : <SendHorizontal className="size-4" />}
