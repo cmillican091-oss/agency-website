@@ -656,7 +656,16 @@ export function MissionControlDashboard() {
       const data = (await response.json().catch(() => null)) as { message?: string; reply?: string } | null;
 
       if (!response.ok) {
-        throw new Error(data?.message ?? `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`);
+        const fallbackMessage =
+          response.status === 400
+            ? "Please review your message and try again."
+            : response.status === 404
+              ? `${selectedAgent.name} is unavailable right now.`
+              : response.status === 500
+                ? `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`
+                : `Chat request failed with status ${response.status}. Please try again.`;
+
+        throw new Error(data?.message ?? fallbackMessage);
       }
 
       const reply = data?.reply?.trim();
@@ -672,9 +681,11 @@ export function MissionControlDashboard() {
       }));
     } catch (error) {
       const message =
-        error instanceof Error
-          ? error.message
-          : `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`;
+        error instanceof TypeError
+          ? "We couldn't reach this agent right now. Please check your connection and try again."
+          : error instanceof Error
+            ? error.message
+            : `${selectedAgent.name} couldn't respond right now. Please try again in a moment.`;
 
       updateAgentChat(agentId, (session) => ({
         ...session,
